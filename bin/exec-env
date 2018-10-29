@@ -4,7 +4,12 @@ if asdf current java > /dev/null 2>&1 ; then
 	asdf_java_version=$(asdf current java | sed -s 's|\(.*\) \?(.*|\1|g')
 	case "$(uname -s)" in
 		Darwin)
-			export JAVA_HOME=$(asdf where java "$asdf_java_version")/Contents/Home ;;
+			if [ -d $(asdf where java "$asdf_java_version")/Contents/Home ]; then
+				export JAVA_HOME=$(asdf where java "$asdf_java_version")/Contents/Home
+			else
+				export JAVA_HOME=$(asdf where java "$asdf_java_version")
+			fi
+			;;
 		*) 
 			export JAVA_HOME=$(asdf where java "$asdf_java_version") ;;
 	esac
